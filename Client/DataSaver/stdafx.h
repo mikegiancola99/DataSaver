@@ -23,6 +23,8 @@
 #include <atlbase.h>
 #include <atlcom.h>
 #include <atlctl.h>
+#include <Windows.h>
 
 #include <string>
+#include <algorithm>
 using namespace std;
