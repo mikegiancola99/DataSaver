@@ -14,7 +14,7 @@
 const wstring DBConstants::dbName            = L"dataSaver.db";
 
 const wstring DBConstants::savedContentTable       = L"saved_content";
-const wstring DBConstants::createSavedContentTable = L"CREATE TABLE "      + DBConstants::savedContentTable + L" (int dirIndex, filename, md5, state)";
+const wstring DBConstants::createSavedContentTable = L"CREATE TABLE "      + DBConstants::savedContentTable + L" (dirIndex, filename, md5, state)";
 // adds a new entry, content should be sent
 const wstring DBConstants::addFileEntrySQL         = L"INSERT INTO "       + DBConstants::savedContentTable + L" (dirIndex, filename, md5, state) values ({0}, '{1}', '{2}', 0)";
 const wstring DBConstants::findFileEntryByHashSQL  = L"SELECT rowid FROM " + DBConstants::savedContentTable + L" WHERE md5='{0}'";

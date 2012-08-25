@@ -36,25 +36,32 @@ void DatabaseManager::AddFile(FileEntry* inEntry)
     wstring sql(DBConstants::addFileEntrySQL);
 
     int dirIndex = FindDir(inEntry->GetPath());
+    if (dirIndex == -1)
+    {
+        AddDir(inEntry->GetPath());
+        dirIndex = FindDir(inEntry->GetPath());
+    }
+
     if (dirIndex > -1)
     {
         const wstring index0Str(L"{0}");
         int index0Loc = sql.find(index0Str);
+
         char buff[512];
         ltoa(dirIndex, buff, 10);
         string tmpBuff(buff);
         sql.replace(index0Loc, index0Str.length(), wstring(tmpBuff.begin(), tmpBuff.end()));
-    }
-
-    const wstring index1Str(L"{1}");
-    int index1Loc = sql.find(index1Str);
-    sql.replace(index1Loc, index1Str.length(), inEntry->GetFilename());
-
-    const wstring index2Str(L"{2}");
-    int index2Loc = sql.find(index2Str);
-    sql.replace(index2Loc, index2Str.length(), inEntry->GetHash());
     
-    GetStringsFromDB(sql);
+        const wstring index1Str(L"{1}");
+        int index1Loc = sql.find(index1Str);
+        sql.replace(index1Loc, index1Str.length(), inEntry->GetFilename());
+
+        const wstring index2Str(L"{2}");
+        int index2Loc = sql.find(index2Str);
+        sql.replace(index2Loc, index2Str.length(), inEntry->GetHash());
+    
+        GetStringsFromDB(sql);
+    }
 }
 
 // ************************************************************************

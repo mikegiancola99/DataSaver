@@ -31,22 +31,27 @@ void TrackedDirectory::LoadDirectory(const wstring& inPath, vector<wstring>& out
         {
             const wstring fileName(ffd.cFileName);
             if ((fileName.compare(L".") != 0) && (fileName.compare(L"..") != 0))
-                outDirs.push_back(fileName);
+                outDirs.push_back(inPath + L"\\" + fileName);
         }
         else
         {
             LARGE_INTEGER filesize;
             filesize.LowPart = ffd.nFileSizeLow;
             filesize.HighPart = ffd.nFileSizeHigh;
-
-            const wstring hash = hashMgr.HashGen(inPath + wstring(L"\\") + wstring(ffd.cFileName));
-            if (dbMgr.FindFile(hash) == -1)
+            
+            wstring tmpFilename(ffd.cFileName);
+            std::transform(tmpFilename.begin(), tmpFilename.end(), tmpFilename.begin(), tolower);
+            if (tmpFilename.find(L".jpg") != string::npos)
             {
-                FileEntry entry;
-                entry.SetFilename(ffd.cFileName);
-                entry.SetPath(inPath);
-                entry.SetHash(hash);
-                dbMgr.AddFile(&entry);
+                const wstring hash = hashMgr.HashGen(inPath + wstring(L"\\") + wstring(ffd.cFileName));
+                if (dbMgr.FindFile(hash) == -1)
+                {
+                    FileEntry entry;
+                    entry.SetFilename(ffd.cFileName);
+                    entry.SetPath(inPath);
+                    entry.SetHash(hash);
+                    dbMgr.AddFile(&entry);
+                }
             }
 
          //_tprintf(TEXT("  %s   %ld bytes\n"), ffd.cFileName, filesize.QuadPart);
@@ -77,4 +82,6 @@ void TrackedDirectory::LoadDirectory(const wstring& inPath, vector<wstring>& out
     //FILE_NOTIFY_INFORMATION* fni = (FILE_NOTIFY_INFORMATION*)buf;
 //CStringW wstr(fni.Data, fni.Length / sizeof(wchar_t));
 
+
+    int zzzTop = 0;
 }
